@@ -38,6 +38,11 @@ well_type_options = [
 ]
 
 
+# connect to database
+# populate data if empty
+# read data (try using cool tools)
+# make it as a
+
 # Load data
 df = pd.read_csv(DATA_PATH.joinpath("wellspublic.csv"), low_memory=False)
 df["Date_Well_Completed"] = pd.to_datetime(df["Date_Well_Completed"])
@@ -51,7 +56,7 @@ points = pickle.load(open(DATA_PATH.joinpath("points.pkl"), "rb"))
 
 
 # Create global chart template
-mapbox_access_token = "pk.eyJ1IjoicGxvdGx5bWFwYm94IiwiYSI6ImNrOWJqb2F4djBnMjEzbG50amg0dnJieG4ifQ.Zme1-Uzoi75IaFbieBDl3A"
+mapbox_access_token = "pk.eyJ1Ijoieml5YWRtc3EiLCJhIjoiY2p4eDZramVkMDNyZzNwbjdhaHU2M3c1bCJ9.i0n-nwemoGye3GAASYP5TwnO"
 
 layout = dict(
     autosize=True,
@@ -139,7 +144,8 @@ app.layout = html.Div(
                             value=[1990, 2010],
                             className="dcc_control",
                         ),
-                        html.P("Filter by well status:", className="control_label"),
+                        html.P("Filter by well status:",
+                               className="control_label"),
                         dcc.RadioItems(
                             id="well_status_selector",
                             options=[
@@ -160,16 +166,19 @@ app.layout = html.Div(
                         ),
                         dcc.Checklist(
                             id="lock_selector",
-                            options=[{"label": "Lock camera", "value": "locked"}],
+                            options=[
+                                {"label": "Lock camera", "value": "locked"}],
                             className="dcc_control",
                             value=[],
                         ),
-                        html.P("Filter by well type:", className="control_label"),
+                        html.P("Filter by well type:",
+                               className="control_label"),
                         dcc.RadioItems(
                             id="well_type_selector",
                             options=[
                                 {"label": "All ", "value": "all"},
-                                {"label": "Productive only ", "value": "productive"},
+                                {"label": "Productive only ",
+                                    "value": "productive"},
                                 {"label": "Customize ", "value": "custom"},
                             ],
                             value="productive",
@@ -192,7 +201,8 @@ app.layout = html.Div(
                         html.Div(
                             [
                                 html.Div(
-                                    [html.H6(id="well_text"), html.P("No. of Wells")],
+                                    [html.H6(id="well_text"),
+                                     html.P("No. of Wells")],
                                     id="wells",
                                     className="mini_container",
                                 ),
@@ -286,7 +296,8 @@ def produce_individual(api_well_num):
         return None, None, None, None
 
     index = list(
-        range(min(points[api_well_num].keys()), max(points[api_well_num].keys()) + 1)
+        range(min(points[api_well_num].keys()),
+              max(points[api_well_num].keys()) + 1)
     )
     gas = []
     oil = []
@@ -393,7 +404,8 @@ def update_year_slider(count_graph_selected):
     if count_graph_selected is None:
         return [1990, 2010]
 
-    nums = [int(point["pointNumber"]) for point in count_graph_selected["points"]]
+    nums = [int(point["pointNumber"])
+            for point in count_graph_selected["points"]]
     return [min(nums) + 1960, max(nums) + 1961]
 
 
@@ -503,7 +515,8 @@ def make_individual_figure(main_graph_hover):
                 name="Gas Produced (mcf)",
                 x=index,
                 y=gas,
-                line=dict(shape="spline", smoothing=2, width=1, color="#fac1b7"),
+                line=dict(shape="spline", smoothing=2,
+                          width=1, color="#fac1b7"),
                 marker=dict(symbol="diamond-open"),
             ),
             dict(
@@ -512,7 +525,8 @@ def make_individual_figure(main_graph_hover):
                 name="Oil Produced (bbl)",
                 x=index,
                 y=oil,
-                line=dict(shape="spline", smoothing=2, width=1, color="#a9bb95"),
+                line=dict(shape="spline", smoothing=2,
+                          width=1, color="#a9bb95"),
                 marker=dict(symbol="diamond-open"),
             ),
             dict(
@@ -521,7 +535,8 @@ def make_individual_figure(main_graph_hover):
                 name="Water Produced (bbl)",
                 x=index,
                 y=water,
-                line=dict(shape="spline", smoothing=2, width=1, color="#92d8d8"),
+                line=dict(shape="spline", smoothing=2,
+                          width=1, color="#92d8d8"),
                 marker=dict(symbol="diamond-open"),
             ),
         ]
